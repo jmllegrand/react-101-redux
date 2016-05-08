@@ -4,7 +4,6 @@
 
 var expect = require('expect');
 
-var state = 0;
 
 function counter(state, action) {
   if (typeof state === 'undefined') {
