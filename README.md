@@ -47,4 +47,21 @@ function square(x) {
 
 #### Session: how to write a reducer for the counter example
 
+es6 default argument 
 
+```
+function counter(state = 0 , action) {
+  return (action.type === 'INCREMENT') ? state + 1 :
+    (action.type === 'DECREMENT') ? state - 1 :
+      state;
+}
+```
+
+es6 arrow function declaration 
+```
+const counter = (state = 0 , action) => {
+  return (action.type === 'INCREMENT') ? state + 1 :
+    (action.type === 'DECREMENT') ? state - 1 :
+      state;
+};
+```

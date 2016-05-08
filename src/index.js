@@ -5,14 +5,11 @@
 var expect = require('expect');
 
 
-function counter(state, action) {
-  if (typeof state === 'undefined') {
-    return 0;
-  }
+const counter = (state = 0 , action) => {
   return (action.type === 'INCREMENT') ? state + 1 :
     (action.type === 'DECREMENT') ? state - 1 :
       state;
-}
+};
 
 expect (
   counter(0, {type: 'INCREMENT'})
