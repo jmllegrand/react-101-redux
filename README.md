@@ -15,11 +15,16 @@ Whether it is initiated by a network request or by user interaction, any data th
 
 
 #### The third principle of Redux: The Reducer Function
-The state changes need to be described as a pure function that takes
+The state changes need to be described as a *pure function* that takes
 
-* the previous state and
-* the action being dispatched
-* It returns the next state of your application
+* as arguments :the previous state & the action being dispatched
+* returns the next state of your application
+
+```
+function counter (state, action) {
+  return state;
+}
+```
 
 There is a single function, the *reducer function*, that manages how the next state is calculated based on the previous state of the whole application and
 the action being dispatched:
@@ -39,3 +44,7 @@ function square(x) {
 * do not have any observable side effects
 
 * do not modify the values passed to them
+
+#### Session: how to write a reducer for the counter example
+
+
