@@ -3,7 +3,8 @@
 
 #### The first principle of Redux: have a single immutable state tree
 Everything that changes in the application (data and UI state) is contained in a single object called the *State* or the *State Tree*.
-The state is a minimal representation of the data in your app
+The state is a minimal representation of the data in your app.
+The object used to store the *state tree* is the *store*
 
 #### The second principle of Redux: describe State Changes with Actions
 The State Tree is read only. You cannot modify or write to it directly. Anytime you want to change the state, you need to dispatch an action.
@@ -65,3 +66,34 @@ const counter = (state = 0 , action) => {
       state;
 };
 ```
+
+#### Session:  Store Methods
+
+es6 destucturing 
+
+```
+const {createStore} = Redux;
+```
+equivalent to 
+
+```
+var createStore = Redux.createStore;
+```
+
+3 methods avaialbel once a *store* has been instantiated
+
+- getState() to retrieve the current state tree of the application 
+
+```
+store.getState()
+```
+
+- dispatch() to dispatch *actions*
+This is the only way to change the data in the store
+
+
+```
+const actionIncrement = store.dispatch({type: 'INCREMENT'});
+```
+
+- subscribe() to add a change listener that will be called any time an action is dispatched
