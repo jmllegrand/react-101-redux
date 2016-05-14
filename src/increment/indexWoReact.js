@@ -5,13 +5,47 @@
 import expect from 'expect';
 import Redux from 'redux';
 
-import {createStore} from 'redux';
+//import {createStore} from 'redux';
 
 // counter is the reducer that manage the state for the counter example
 const counter = (state = 0 , action) => {
   return (action.type === 'INCREMENT') ? state + 1 :
     (action.type === 'DECREMENT') ? state - 1 :
       state;
+};
+
+
+// the first & only argument ot createStore is the reducer function
+const createStore = (reducer) => {
+
+  // the store holds the current state kept in a variable
+  let state;
+  let listeners = [];
+
+  // getState() returns the current value of the state variable
+  const getState = () => state;
+
+
+  // dispatch() takes an action - will impact the state
+  const dispatch = (action) => {
+    state = reducer(state, action);
+    listeners.forEach(listener => listener());
+  };
+
+  // subscribe()
+  const subscribe = (listener) => {
+    listeners.push(listener);
+    return () => {
+      listeners = listeners.filter(l => l !== listener);
+    }
+  };
+
+  dispatch({});
+
+  return {
+    getState, dispatch, subscribe
+  }
+
 };
 
 const store = createStore(counter);
