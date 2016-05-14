@@ -5,6 +5,7 @@
 
 import expect from 'expect';
 import deepFreeze from 'deep-freeze';
+import _ from 'lodash';
 
 
 // objective: build an array list counter
@@ -30,6 +31,15 @@ function incrementCounter(list, index) {
     .concat(list[index] + 1)
     .concat(list.slice(index + 1));
 }
+
+function toggleTodo(todo) {
+  //return  _.assign(_.clone(todo), {completed: !todo.completed});
+  return Object.assign({}, todo, {
+    completed: !todo.completed
+  })
+};
+
+
 
 var testAddCounter = function () {
   var listBefore = [];
@@ -62,10 +72,31 @@ var incrementCounterTest = function () {
   ).toEqual(listAfter)
 };
 
+
+var toggleTodoTest = function() {
+  var todoBefore = {
+    id: 0,
+    test: 'Learn Redux',
+    completed: false
+  };
+
+  var todoAfter = {
+    id: 0,
+    test: 'Learn Redux',
+    completed: true
+  };
+  deepFreeze(todoBefore);
+
+
+  expect(toggleTodo(todoBefore)).toEqual(todoAfter)
+};
+
 testAddCounter();
 
 removeCounterTest();
 
 incrementCounterTest();
+
+toggleTodoTest();
 
 console.log('All tests are successful');
