@@ -43,7 +43,7 @@ function handleErrors() {
 
 function buildScript(file, watch) {
   var props = {
-    entries: ['./src/increment/' + file],
+    entries: ['./src/counterList/' + file],
     debug : true,
     cache: {},
     packageCache: {},

@@ -103,3 +103,68 @@ const actionIncrement = store.dispatch({type: 'INCREMENT'});
 #### Redux & Stateless components
 stateless components === functional stateless components 
 *any React Component declared as a function that has no state and returns the same markup given the same props*
+
+
+#### List & mutation
+
+#### Add an element
+
+Approach 1 : with mutation
+
+```
+function addCounter (list) {
+  list.push(0);
+  return list;
+}
+```
+
+Approach 2 :using concat() that does not modify the original array
+
+```
+function addCounter (list) {
+  return list.concat([0]);
+}
+```
+
+Approach 3 :using the spread operator 
+
+```
+function addCounter (list) {
+  return [...list, 0];
+}
+```
+
+
+#### Remove an element
+
+Approach 1 : with mutation
+
+```
+function removeCounter(index, numbers, list) {
+  list.splice(index, numbers);
+  return list;
+}
+```
+
+Approach 2 :using slice() & concat() that does not modify the original array
+
+```
+function removeCounter(index, list) {
+  return list
+    .slice(0, index)
+    .concat(list.slice(index + 1));
+}
+```
+
+Approach 3 :using the spread operator 
+
+```
+function removeCounter(index, list) {
+  return [
+    ...list.slice(0, index),
+    ...list.slice(index + 1)
+    ]
+}
+```
+
+#### Change an element

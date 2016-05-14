@@ -31,6 +31,7 @@
     "watchify": "^3.7.0"
   },
   "dependencies": {
+    "deep-freeze": "0.0.1",
     "expect": "^1.20.1",
     "react": "^15.0.2",
     "react-dom": "^15.0.2",
