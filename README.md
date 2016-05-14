@@ -99,3 +99,7 @@ const actionIncrement = store.dispatch({type: 'INCREMENT'});
 ```
 
 - subscribe() to add a change listener that will be called any time an action is dispatched
+
+#### Redux & Stateless components
+stateless components === functional stateless components 
+*any React Component declared as a function that has no state and returns the same markup given the same props*

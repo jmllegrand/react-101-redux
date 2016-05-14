@@ -78,13 +78,13 @@ function buildScript(file, watch) {
 }
 
 gulp.task('scripts', function() {
-  return buildScript('indexWoReact.js', false); // this will run once because we set watch to false
+  return buildScript('index.js', false); // this will run once because we set watch to false
 });
 
 
 
 // run 'scripts' task first, then watch for future changes
 gulp.task('default', ['scripts','browser-sync'], function() {
-  return buildScript('indexWoReact.js', true); // browserify watch for JS changes
+  return buildScript('index.js', true); // browserify watch for JS changes
 });
 
