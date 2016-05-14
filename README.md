@@ -77,7 +77,9 @@ const {createStore} = Redux;
 equivalent to 
 
 ```
-var createStore = Redux.createStore;
+var createStore = Redux.createStore;`
+import {createStore} from 'redux';
+
 ```
 
 3 methods avaialbel once a *store* has been instantiated

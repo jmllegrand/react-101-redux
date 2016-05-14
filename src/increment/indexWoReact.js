@@ -15,16 +15,19 @@ const counter = (state = 0 , action) => {
 };
 
 const store = createStore(counter);
+
 console.log('JM - store.getState()', store.getState());
 
-store.dispatch({type: 'INCREMENT'});
-console.log('JM - store.getState()', store.getState());
-
-store.subscribe(() => {
+const render = () => {
   document.body.innerText = store.getState()
-});
+};
+
+// Register a callback that the store will call ... anytime an action has been dispatched
+store.subscribe(render);
+render();
 
 
+//anytime the body is clicked, increment of the counter
 document.addEventListener('click', () => {
   store.dispatch({type: 'INCREMENT'});
 });
