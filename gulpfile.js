@@ -43,7 +43,7 @@ function handleErrors() {
 
 function buildScript(file, watch) {
   var props = {
-    entries: ['./src/counterList/' + file],
+    entries: ['./src/todo/' + file],
     debug : true,
     cache: {},
     packageCache: {},
