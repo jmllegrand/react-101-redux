@@ -171,3 +171,20 @@ function removeCounter(index, list) {
 
 
 #### Reducer Composition with Objects
+
+
+ES6 object literal shorthand property names
+
+```
+var todoAppReducer = combineReducers({
+  todosReducer: todosReducer,
+  visibilityFilterReducer: visibilityFilterReducer
+});
+```
+
+```
+var todoAppReducer = combineReducers({
+  todosReducer,
+  visibilityFilterReducer
+});
+```

@@ -7,6 +7,8 @@ import expect from 'expect';
 import deepFreeze from 'deep-freeze';
 import _ from 'lodash';
 import {createStore} from 'redux';
+import {combineReducers} from 'redux';
+
 
 var todoReducer = function (state = {}, action) {
   switch (action.type) {
@@ -58,7 +60,7 @@ var visibilityFilterReducer = function(state='SHOW_ALL', action) {
   }
 };
 
-var todoAppReducer = function(state = {}, action) {
+/* var todoAppReducer = function(state = {}, action) {
   return {
     todos: todosReducer(
       state.todos,
@@ -69,7 +71,13 @@ var todoAppReducer = function(state = {}, action) {
       action
     )
   }
-};
+};*/
+
+var todoAppReducer = combineReducers({
+  todosReducer: todosReducer,
+  visibilityFilterReducer: visibilityFilterReducer
+});
+
 
 const store = createStore(todoAppReducer);
 
