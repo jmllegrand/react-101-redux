@@ -6,7 +6,7 @@
 import expect from 'expect';
 import deepFreeze from 'deep-freeze';
 import _ from 'lodash';
-
+import {createStore} from 'redux';
 
 var todoReducer = function (state = {}, action) {
   switch (action.type) {
@@ -48,6 +48,73 @@ var todosReducer = function (state = [], action) {
   }
 };
 
+
+var visibilityFilterReducer = function(state='SHOW_ALL', action) {
+  switch (action.type) {
+    case 'SET_VISIBILITY_FILTER':
+      return action.filter;
+    default:
+      return state;
+  }
+};
+
+var todoAppReducer = function(state = {}, action) {
+  return {
+    todos: todosReducer(
+      state.todos,
+      action
+    ),
+    visibilityFilterReducer: visibilityFilterReducer(
+      state.visibilityFilter,
+      action
+    )
+  }
+};
+
+const store = createStore(todoAppReducer);
+
+console.log('JM - Initial state');
+console.log(store.getState());
+console.log('--------------------');
+
+console.log('JM - Dispatching a ADD_TODO');
+store.dispatch({
+  type: 'ADD_TODO',
+  id: 0,
+  text: 'Learn React'
+});
+console.log('JM - Current state');
+console.log(JSON.stringify(store.getState(), null,2));
+console.log('--------------------');
+
+console.log('JM - Dispatching a ADD_TODO');
+store.dispatch({
+  type: 'ADD_TODO',
+  id: 1,
+  text: 'Go shopping'
+});
+console.log('JM - Current state');
+console.log(JSON.stringify(store.getState(), null, 2));
+console.log('--------------------');
+
+console.log('JM - Dispatching a TOGGLE_TODO');
+store.dispatch({
+  type: 'TOGGLE_TODO',
+  id: 1
+});
+console.log('JM - Current state');
+console.log(JSON.stringify(store.getState(), null, 2));
+console.log('--------------------');
+
+
+console.log('JM - Dispatching a SET_VISIBILITY_FILTER');
+store.dispatch({
+  type: 'SET_VISIBILITY_FILTER',
+  filter: 'SHOW_COMPLETED'
+});
+console.log('JM - Current state');
+console.log(JSON.stringify(store.getState(), null, 2));
+console.log('--------------------');
 
 var testTodosReducer = function () {
   console.log('executing testTodosReducer()');

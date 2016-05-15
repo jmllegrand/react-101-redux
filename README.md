@@ -170,4 +170,4 @@ function removeCounter(index, list) {
 #### Change an element
 
 
-#### Reducer composition
+#### Reducer Composition with Objects
