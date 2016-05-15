@@ -7,7 +7,7 @@ import expect from 'expect';
 import deepFreeze from 'deep-freeze';
 import _ from 'lodash';
 import {createStore} from 'redux';
-import {combineReducers} from 'redux';
+//import {combineReducers} from 'redux';
 
 
 var todoReducer = function (state = {}, action) {
@@ -51,7 +51,7 @@ var todosReducer = function (state = [], action) {
 };
 
 
-var visibilityFilterReducer = function(state='SHOW_ALL', action) {
+var visibilityFilterReducer = function (state = 'SHOW_ALL', action) {
   switch (action.type) {
     case 'SET_VISIBILITY_FILTER':
       return action.filter;
@@ -61,18 +61,37 @@ var visibilityFilterReducer = function(state='SHOW_ALL', action) {
 };
 
 /* var todoAppReducer = function(state = {}, action) {
-  return {
-    todos: todosReducer(
-      state.todos,
-      action
-    ),
-    visibilityFilterReducer: visibilityFilterReducer(
-      state.visibilityFilter,
-      action
-    )
-  }
-};*/
+ return {
+ todos: todosReducer(
+ state.todos,
+ action
+ ),
+ visibilityFilterReducer: visibilityFilterReducer(
+ state.visibilityFilter,
+ action
+ )
+ }
+ };*/
 
+//combineReducers is a function with
+// - arguments: reducers
+// - return value is a reducer itself, a function with a state and an action
+// a example of functional programming : functions can take other functions as arguments and returns
+// others functions
+var combineReducers = function (reducers) {
+  return function (state = {}, action) {
+    // returns an array of strings corresponding to the properties found in the reducers object passed
+    // proceed a reduce() for each of the properties
+    return Object.keys(reducers).reduce(function (nextState, key) {
+        nextState[key] = reducers[key](state[key], action);
+        return nextState;
+      }, {}
+    )
+  };
+};
+
+// combineReducers is called with a single argument, an object
+// - with values the reducers functions
 var todoAppReducer = combineReducers({
   todosReducer: todosReducer,
   visibilityFilterReducer: visibilityFilterReducer
@@ -92,7 +111,7 @@ store.dispatch({
   text: 'Learn React'
 });
 console.log('JM - Current state');
-console.log(JSON.stringify(store.getState(), null,2));
+console.log(JSON.stringify(store.getState(), null, 2));
 console.log('--------------------');
 
 console.log('JM - Dispatching a ADD_TODO');
@@ -175,12 +194,24 @@ var testToggleTodo = function () {
   deepFreeze(stateBefore);
   deepFreeze(action);
   expect(todosReducer(stateBefore, action)).toEqual(stateAfter);
+};
 
+var testObjectKeys = function () {
+  console.log('executing testObjectKeys()');
+  var reducersObject = {
+    todosReducer: todosReducer,
+    visibilityFilterReducer: visibilityFilterReducer
+  };
+
+  var reducersObjectFinal = ['todosReducer', 'visibilityFilterReducer'];
+  expect(Object.keys(reducersObject)).toEqual(reducersObjectFinal);
 
 };
 
 
+
 testTodosReducer();
 testToggleTodo();
+testObjectKeys();
 
 console.log('All tests are successful');
