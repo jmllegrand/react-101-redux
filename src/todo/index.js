@@ -7,23 +7,41 @@ import expect from 'expect';
 import deepFreeze from 'deep-freeze';
 import _ from 'lodash';
 
+
+var todoReducer = function (state = {}, action) {
+  switch (action.type) {
+    case 'ADD_TODO':
+      return {
+        id: action.id,
+        text: action.text,
+        completed: false
+      };
+    case 'TOGGLE_TODO':
+      return state.id !== action.id ?
+        state :
+        Object.assign({}, state, {completed: !state.completed});
+
+    default:
+      return state;
+  }
+};
+
+
 //reducer function
 // - state: an array of todos
 //reducer: a pure function to implement the update of the application
-
+//Initial design of the reducer  has too many concerns
+// - how todos arrays are updates
+// - how individual todos are updated (object level)
 var todosReducer = function (state = [], action) {
-  var structure = {
-    id: 0,
-    text: '',
-    completed: false
-  };
   switch (action.type) {
     case 'ADD_TODO':
-      return state.concat(Object.assign({}, structure, {text: action.text}));
+      return state.concat(todoReducer(undefined, action));
 
     case 'TOGGLE_TODO':
-      return state.map(function(todo){
-        return todo.id !== action.id ? todo : Object.assign({}, todo, {completed: !todo.completed});
+      return state.map(function (todo) {
+        console.log('todoReducer for', JSON.stringify(todo), ' is ', todoReducer(todo, action));
+        return todoReducer(todo, action);
       });
     default :
       return state;
