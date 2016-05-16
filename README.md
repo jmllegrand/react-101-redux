@@ -188,3 +188,23 @@ var todoAppReducer = combineReducers({
   visibilityFilterReducer
 });
 ```
+
+
+#### Todo - View Layer
+
+Declare render() that updates the dom in response to the current application state
+```
+var render = function() {
+  ReactDOM.render(<Todos />, document.getElementById("main"));
+};
+```
+
+Subscribe/Add to store a change listener that will be called any time an action is dispatched
+
+```
+store.subscribe(render);
+```
+Execute the rendering at initialisation time
+```
+render();
+```
