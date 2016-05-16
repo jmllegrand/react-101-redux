@@ -78,7 +78,7 @@ const store = createStore(todoAppReducer);
 let nextTodoId = 0;
 
 class ToDoApp extends Component {
-  handleClick() {
+  inputOnClick() {
     console.log('JM - ToDoApp.handleClick()');
     store.dispatch({
       type: 'ADD_TODO',
@@ -86,6 +86,11 @@ class ToDoApp extends Component {
       text: this.input.value
     });
     this.input.value = '';
+  }
+
+  labelOnClick() {
+    console.log('JM - ToDoApp.labelOnClick()');
+
   }
 
   textOnBlur() {
@@ -100,12 +105,16 @@ class ToDoApp extends Component {
         <input type="text" ref={node => {
           this.input = node;
         }} placeholder="todo name ..."/>
-        <button onClick={this.handleClick.bind(this)}> Add Todo</button>
+        <button onClick={this.inputOnClick.bind(this)}> Add Todo</button>
         <ul>
           {this.props.todos.map(function (todo) {
             return (
-              <li key={todo.id}>
-                {todo.text}
+              <li key={todo.id}
+                  placeholder="please enter text"
+                  onClick={function() {store.dispatch({type: 'TOGGLE_TODO', id: todo.id})}}
+                  style= {{textDecoration: todo.completed? 'line-trough' : 'none'}}>
+                <span> {todo.text} </span>
+                <span>{!todo.completed ? 'false' : 'true'}</span>
               </li>
             )
           })}
