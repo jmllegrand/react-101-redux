@@ -232,3 +232,49 @@ Approach 3 - destructuring to avoid typing this.props every time
     const {visibilityFilter, todos} = this.props;
     var visibleTodos = getVisibleTodos(todos, visibilityFilter);
 ```
+
+
+#### Presentational Components
+#### Todo
+Presentational components: it does not specify any behavior but knows how to render a Todo
+
+```
+class Todo extends Component {
+  render() {
+    const {text, completed, onclick} = this.props;
+    return (
+      <li placeholder="please enter text"
+          onClick={onClick}
+          style={{textDecoration: completed? 'line-through' : 'none'}}>
+        <span> {text} </span>
+      </li>
+    )
+  }
+}
+```
+
+```
+const Todo = ({text, completed, onClick}) => (
+  <li placeholder="please enter text"
+      onClick={onClick}
+      style={{textDecoration: completed? 'line-through' : 'none'}}>
+    <span> {text} </span>
+  </li>
+);
+```
+
+#### Todo list
+
+```
+const TodoList = ({todos, onTodoClick}) => (
+  <ul>
+    {todos.map(function (todo) {
+      return <Todo key={todo.id}
+                   text={todo.text} completed={todo.completed}
+                   onClick={function() {onTodoClick(todo.id)}}/>
+    })}
+  </ul>
+);
+```
+
+

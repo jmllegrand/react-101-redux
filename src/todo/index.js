@@ -117,6 +117,25 @@ class FilterLink extends Component {
 }
 
 
+const Todo = ({text, completed, onClick}) => (
+  <li placeholder="please enter text"
+      onClick={onClick}
+      style={{textDecoration: completed? 'line-through' : 'none'}}>
+    <span> {text} </span>
+  </li>
+);
+
+const TodoList = ({todos, onTodoClick}) => (
+  <ul>
+    {todos.map(function (todo) {
+      return <Todo key={todo.id}
+                   text={todo.text} completed={todo.completed}
+                   onClick={function() {onTodoClick(todo.id)}}/>
+    })}
+  </ul>
+);
+
+
 class ToDoApp extends Component {
   inputOnClick() {
     console.log('JM - ToDoApp.handleClick()');
@@ -149,18 +168,12 @@ class ToDoApp extends Component {
           this.input = node;
         }} placeholder="todo name ..."/>
         <button onClick={this.inputOnClick.bind(this)}> Add Todo</button>
-        <ul>
-          {visibleTodos.map(function (todo) {
-            return (
-              <li key={todo.id}
-                  placeholder="please enter text"
-                  onClick={function() {store.dispatch({type: 'TOGGLE_TODO', id: todo.id})}}
-                  style={{textDecoration: todo.completed? 'line-through' : 'none'}}>
-                <span> {todo.text} </span>
-              </li>
-            )
-          })}
-        </ul>
+        <TodoList
+          todos={visibleTodos}
+          onTodoClick={function(id) {
+          store.dispatch({type: 'TOGGLE_TODO', id: id})
+          }
+        }/>
         <p>
           Show:
           {'  '}
