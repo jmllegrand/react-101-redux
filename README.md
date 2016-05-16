@@ -208,3 +208,27 @@ Execute the rendering at initialisation time
 ```
 render();
 ```
+
+#### Todo - Filtering
+
+Get access to props
+
+Approach 1
+```
+    var visibleTodos = getVisibleTodos(this.props.todos, this.props.visibilityFilter);
+```
+
+
+Approach 2
+```
+    var visibilityFilter = this.props.visibilityFilter;
+    var visibleTodos = getVisibleTodos(this.props.todos, visibilityFilter);
+```
+
+
+Approach 3 - destructuring to avoid typing this.props every time
+
+```
+    const {visibilityFilter, todos} = this.props;
+    var visibleTodos = getVisibleTodos(todos, visibilityFilter);
+```
