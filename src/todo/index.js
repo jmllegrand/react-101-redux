@@ -98,15 +98,16 @@ let nextTodoId = 0;
 const FilterLink = ({
   filter,
   currentFilter,
-  onFilterClick
+  onFilterClick,
+  children
   }) => (
   filter === currentFilter ?
-    <span>{this.props.children}</span> :
+    <span>{children}</span> :
     <a href="#"
        onClick={function(event) {
          event.preventDefault();
          onFilterClick(filter);
-         }}> {this.props.children}
+         }}> {children}
     </a>
 );
 
