@@ -277,4 +277,178 @@ const TodoList = ({todos, onTodoClick}) => (
 );
 ```
 
+#### Container Components
+
+
+*TodoApp* specifies the behaviors when 
+- buttons are clicked, 
+- items are added, and 
+- filters are applied. 
+
+The individual presentational components, such as *AddTodo*, *TodoList*, *Footer* & *FilterLink*, etc don't dispatch actions. 
+They call their callback functions in the props. 
+Therefore, they are only responsible for the looks, not the behavior.
+
+Downside of this approach: a lot of props must be passed down the tree even when intermediate components don't use them.
+
+For example, *FilterLink* needs to know the current filter so it can change its appearance when it's active. 
+In order to receive the current filter, it has to be passed down from the top. This is why *Footer* has to be given visibilityFilter as a prop
+so it can be passed to a *FilterLink*.
+
+This breaks encapsulation because the parent components need to know too much about what data the child components need. 
+To fix this, we are going to extract some container components.
+
+
+##### Simplify the Footer Component
+
+Before refactoring, *Footer* component accepts 2 props: 
+- visibilityFilter & 
+- onFilterClick() callback as its props, 
+It doesn't use either of them. It just passes down to the *FilterLink*.
+The *Footer* component doesn't care about the values of its props: they only exist to pass down to *FilterLink*.
+
+
+Before Refactoring 
+```
+    <Footer
+      visibilityFilter={visibilityFilter}
+      onFilterClick={filter =>
+        store.dispatch({
+        type : 'SET_VISIBILITY_FILTER',
+        filter: filter
+      })
+      }
+    />
+```
+
+After Refactoring 
+
+```
+<Footer/>
+
+```
+
+Remove 
+- the props definition from the Footer component,
+- the props usage from the FilterLinks as well
+        
+Before Refactoring 
+
+```
+const Footer = ({
+  visibilityFilter,
+  onFilterClick}) => (
+  <p>
+    Show:
+
+    <FilterLink
+      filter='SHOW_ALL'
+      currentFilter={visibilityFilter}
+      onFilterClick={onFilterClick}
+    >
+      All
+    </FilterLink>
+  </p>
+);
+
+```
+
+
+After Refactoring 
+
+
+```
+const Footer = () => (
+  <p>
+    Show:
+
+    <FilterLink
+      filter='SHOW_ALL'
+    >
+      All
+    </FilterLink>
+  </p>
+);
+```
+
+##### Refactor FilterLink (based on the impacts created in the previous step) into Link 
+
+
+we can't say *FilterLink* is presentational component; its current implementation is inseparable from its behavior.
+ 
+Need to to split  *FilterLink* into
+- a presentational component, *Link* 
+- a container component to manage the logic, *FilterLink* 
+
+The new *Link* presentational component doesn't know anything about the filter. 
+It only accepts 
+- active prop, 
+- onFilterClick handler
+
+*Link* is only concerned with rendering.
+
+```
+
+const Link = ({
+  active,
+  onFilterClick,
+  children
+  }) => (
+  active ?
+    <span>{children}</span> :
+    <a href="#"
+       onClick={(event) => {
+         event.preventDefault();
+         onFilterClick();
+         }}> {children}
+    </a>
+);
+```
+
+##### Create the nex FilterLink 
+The new *FilterLink* will be a class that renders the *Link* with the current data from the store. 
+It's going to read the component props and read the Redux store's state.
+As a container component, *FilterLink* doesn't have its own markup. It delegates rendering to the *Link* presentational 
+component. 
+
+
+```
+class FilterLink extends Component {
+  componentDidMount() {
+    this.unsubscribe = store.subscribe(() =>
+      this.forceUpdate())
+  }
+
+  componentWillUnmount() {
+    this.unsubscribe();
+  }
+
+  render() {
+    const props = this.props;
+    const state = store.getState();
+
+    return (
+      <Link
+        active={props.filter === state.visibilityFilterReducer}
+        onFilterClick = { () =>
+          store.dispatch({
+          type: 'SET_VISIBILITY_FILTER',
+          filter: props.filter
+          })
+        }
+      >
+        {props.children}
+      </Link>
+    )
+  }
+}
+```
+
+
+It calculates *Link* active prop by comparing its own filter prop with the visibilityFilter from the Redux store's state.
+- The filter prop is the one that is passed to the FilterLink from the Footer
+- The visibilityFilter corresponds to the current chosen visibility filter that is held in Redux store's state. 
+If they match, we want the link to appear active.
+
+The container component also needs to specify the behavior. In this case, the FilterLink specifies that when a particular Link is clicked, we should dispatch an action of the type 'SET_VISIBILITY_FILTER' along with the filter value that we take from the props.
 

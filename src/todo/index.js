@@ -95,22 +95,50 @@ function getVisibleTodos(todos, filter) {
 // View integration
 let nextTodoId = 0;
 
-const FilterLink = ({
-  filter,
-  currentFilter,
+const Link = ({
+  active,
   onFilterClick,
   children
   }) => (
-  filter === currentFilter ?
+  active ?
     <span>{children}</span> :
     <a href="#"
-       onClick={function(event) {
+       onClick={(event) => {
          event.preventDefault();
-         onFilterClick(filter);
+         onFilterClick();
          }}> {children}
     </a>
 );
 
+class FilterLink extends Component {
+  componentDidMount() {
+    this.unsubscribe = store.subscribe(() =>
+      this.forceUpdate())
+  }
+
+  componentWillUnmount() {
+    this.unsubscribe();
+  }
+
+  render() {
+    const props = this.props;
+    const state = store.getState();
+
+    return (
+      <Link
+        active={props.filter === state.visibilityFilterReducer}
+        onFilterClick = { () =>
+          store.dispatch({
+          type: 'SET_VISIBILITY_FILTER',
+          filter: props.filter
+          })
+        }
+      >
+        {props.children}
+      </Link>
+    )
+  }
+}
 
 const Todo = ({
   text,
@@ -159,32 +187,24 @@ const AddTodo = ({
   )
 };
 
-const Footer = ({
-  visibilityFilter,
-  onFilterClick}) => (
+const Footer = () => (
   <p>
     Show:
 
     <FilterLink
       filter='SHOW_ALL'
-      currentFilter={visibilityFilter}
-      onFilterClick={onFilterClick}
     >
       All
     </FilterLink>
 
     <FilterLink
       filter='SHOW_ACTIVE'
-      currentFilter={visibilityFilter}
-      onFilterClick={onFilterClick}
     >
       Active
     </FilterLink>
 
     <FilterLink
       filter='SHOW_COMPLETED'
-      currentFilter={visibilityFilter}
-      onFilterClick={onFilterClick}
     >
       Completed
     </FilterLink>
@@ -217,15 +237,7 @@ const ToDoApp = ({
           }
     />
 
-    <Footer
-      visibilityFilter={visibilityFilter}
-      onFilterClick={filter =>
-        store.dispatch({
-        type : 'SET_VISIBILITY_FILTER',
-        filter: filter
-      })
-      }
-    />
+    <Footer />
   </div>
 );
 
